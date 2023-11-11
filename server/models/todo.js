@@ -12,6 +12,20 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Todo.belongsTo(models.User, { foreignKey: "UserId", as: "user" });
     }
+
+    static paginate (query, page, pageSize) {
+      const offset = (page - 1) * pageSize;
+      const limit = pageSize;
+    
+      const options = {
+        ...query,
+        order: [["updatedAt", "desc"]],
+        offset,
+        limit,
+      };
+
+      return Todo.findAndCountAll(options);
+    };    
   }
 
   Todo.init({
