@@ -6,7 +6,7 @@ export function Profile() {
   return (
     <>
       <div className="rounded rounded-lg bg-blue-300 p-4">
-        <h1 className="font-bold text-center uppercase text-2xl">Profile</h1>
+        <h1 className="font-bold text-center uppercase text-2xl">Your Profile</h1>
 
         <div>
           <b className="font-bold">Full Name:</b>
