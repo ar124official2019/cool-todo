@@ -51,7 +51,9 @@ class TodoController {
       const todos = await Todo.findAll({
         where: {
           UserId: user.id
-        }
+        },
+
+        order: [['updatedAt', 'desc']],
       });
       res.json(AppResponse.create(todos));
     } catch (err) {
