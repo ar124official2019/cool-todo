@@ -1,5 +1,10 @@
 export interface TodoState {
   todos: ITodos;
+  page: number;
+  limit: number;
+  total: number;
+  next: number;
+  previous: number;
   selected: ITodo | null;
 }
 

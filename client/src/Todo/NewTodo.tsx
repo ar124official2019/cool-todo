@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../store";
 import { HttpResponse, useHttpPost } from "../types/http";
+import { addTodo } from "../store/todo.slice";
 
 export function NewTodo() {
   const navigate = useNavigate();
@@ -30,6 +31,7 @@ export function NewTodo() {
         return setErr(res);
       }
 
+      dispatch(addTodo(res.data));
       navigate("/todo");
     });
   };
