@@ -20,3 +20,6 @@ app.use("/api/v1/todo", TodoRouter);
 app.use(errorMiddleware);
 
 httpServer.listen(3000);
+httpServer.on("listening", () => {
+  console.info("Server is listening at port: 3000");
+});
