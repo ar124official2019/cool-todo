@@ -15,6 +15,8 @@ export function httpGet(path: string, headers: any = {}) {
       accept: "application/json",
       ...headers,
     },
+
+    credentials: "include",
   })
     .then(async (res) => {
       if (!res.ok) throw res;
@@ -34,6 +36,8 @@ export function httpPost(path: string, data: any, headers: any = {}) {
       accept: "application/json",
       ...headers,
     },
+
+    credentials: "include",
   })
     .then(async (res) => {
       if (!res.ok) throw res;

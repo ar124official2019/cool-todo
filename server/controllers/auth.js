@@ -50,6 +50,26 @@ class AuthController {
       next(err);
     }
   }
+  
+  static async googleLoginPersist(req, res, next) {
+    try {
+      const user = req.user;
+      const result = await User.generateToken(user);
+      await logout(req).catch((err) => console.error(`Error:`, err));
+      res.json(AppResponse.create(result));
+    } catch (err) {
+      next(err);
+    }
+  }
+}
+
+async function logout(req) {
+  return new Promise((res, rej) => {
+    req.logout(function (err) {
+      if (err) rej(err);
+      return res();
+    });
+  });
 }
 
 module.exports = AuthController;

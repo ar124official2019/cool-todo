@@ -3,7 +3,7 @@
     "username": "cool-todo",
     "password": "cool-todo",
     "database": "cool-todo",
-    "host": "mysql",
+    "host": "127.0.0.1",
     "dialect": "mysql"
   }
 }

@@ -17,6 +17,7 @@ import { Login } from "./Auth/login.tsx";
 import { NewTodo } from "./Todo/NewTodo.tsx";
 import { HomeRedirect } from "./HomeRedirect.tsx";
 import { UpdateTodo } from "./Todo/UpdateTodo.tsx";
+import { LoginGoogle } from "./Auth/LoginGoogle.tsx";
 
 const appRouter = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/login-google",
+        element: <LoginGoogle />,
       },
       {
         path: "/logout",

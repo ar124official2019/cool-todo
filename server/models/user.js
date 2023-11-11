@@ -30,6 +30,12 @@ module.exports = (sequelize, DataTypes) => {
       const token = await sign(info);
       return { info, token };
     }
+
+    static async generateToken(info) {
+      delete info.password;
+      const token = await sign(info);
+      return { info, token };
+    }
   }
 
   User.init(
@@ -44,11 +50,15 @@ module.exports = (sequelize, DataTypes) => {
 
       hooks: {
         beforeSave: async (user) => {
-          if (user.isNewRecord || user.changed("password")) {
+          if (
+            (user.isNewRecord || user.changed("password")) &&
+            !!user.get("password")
+          ) {
             const hashedPassword = await hash(
               user.getDataValue("password"),
               10
             );
+            
             user.setDataValue("password", hashedPassword);
           }
         },

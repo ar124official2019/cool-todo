@@ -47,9 +47,12 @@ export function Login() {
       });
   };
 
+  const loginWithGoogle = () => {
+    window.location.href = "http://localhost:3000/api/v1/auth/login/google";
+  };
+
   useEffect(() => {
     if (loginData) navigate("/");
-    console.log(loginData);
   }, [loginData]);
 
   return (
@@ -98,12 +101,21 @@ export function Login() {
             </div>
           )}
 
-          <div className="my-1">
+          <div className="flex flex-row my-2">
             <button
               className="bg-blue-700 rounded rounded-lg p-2 px-4 text-white"
               onClick={login}
             >
               Login
+            </button>
+
+            <div className="mx-1"></div>
+
+            <button
+              className="bg-blue-700 rounded rounded-lg p-2 px-4 text-white"
+              onClick={loginWithGoogle}
+            >
+              Login with Google
             </button>
           </div>
         </div>

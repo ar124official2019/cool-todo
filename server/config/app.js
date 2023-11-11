@@ -1,3 +1,8 @@
+const vars = {
+  GOOGLE_CLIENT_ID: process.env["GOOGLE_CLIENT_ID"],
+  GOOGLE_CLIENT_SECRERT: process.env["GOOGLE_CLIENT_SECRERT"],
+};
+
 class AppResponse {
   constructor(data, message, code, error) {
     this.data = data;
@@ -23,5 +28,6 @@ function errorMiddleware(err, _req, res, _next) {
 
 module.exports = {
   AppResponse,
-  errorMiddleware
+  errorMiddleware,
+  vars
 };
