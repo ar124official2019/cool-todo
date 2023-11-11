@@ -11,18 +11,20 @@ interface SetTodoPage {
   ): TodoState | undefined;
 }
 
-interface SelectTodo {
+interface SingleTodoAction {
   (state: TodoState, action: { type: string; payload: ITodo }): void;
 }
 
-type AddTodo = SelectTodo;
+type AddTodo = SingleTodoAction;
+type UpdateTodo = SingleTodoAction;
 
 export const todoSlice = createSlice<
   TodoState,
   {
     setTodoPage: SetTodoPage;
-    selectTodo: SelectTodo;
+    selectTodo: SingleTodoAction;
     addTodo: AddTodo;
+    updateTodo: UpdateTodo;
   },
   "todo"
 >({
@@ -64,8 +66,16 @@ export const todoSlice = createSlice<
       ...state,
       todos: [action.payload, ...state.todos],
     }),
+
+    updateTodo: (state, action) => ({
+      ...state,
+      todos: [action.payload].concat(
+        state.todos.filter((i) => i.id != action.payload.id)
+      ),
+    }),
   },
 });
 
-export const { setTodoPage, selectTodo, addTodo } = todoSlice.actions;
+export const { setTodoPage, selectTodo, addTodo, updateTodo } =
+  todoSlice.actions;
 export const todoReducer = todoSlice.reducer;

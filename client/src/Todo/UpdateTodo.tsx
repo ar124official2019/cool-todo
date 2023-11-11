@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { HttpResponse, useHttpGet, useHttpPatch } from "../types/http";
+import { useAppDispatch } from "../store";
+import { updateTodo } from "../store/todo.slice";
 
 export function UpdateTodo() {
   const { id } = useParams();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const httpGet = useHttpGet();
   const httpPatch = useHttpPatch();
@@ -31,6 +34,7 @@ export function UpdateTodo() {
         return setErr(res);
       }
 
+      dispatch(updateTodo(res?.data));
       navigate("/todo");
     });
   };

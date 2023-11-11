@@ -7,7 +7,7 @@ export function TodoView(todo: ITodo) {
   return (
     <div className="p-2 bg-blue-100 mb-1 cursor-pointer hover:bg-blue-200">
       <b>{todo.todo}</b>
-      <p>{todo.description || "No Description"}</p>
+      <pre>{todo.description || "No Description"}</pre>
 
       <div className="text-xs flex flex-row-reverse items-center">
         <i>{new Date(todo.updatedAt).toLocaleString()}</i>
