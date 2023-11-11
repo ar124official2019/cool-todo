@@ -1,11 +1,12 @@
 const { sign } = require("jsonwebtoken");
+const { vars } = require("./app");
 
 module.exports = {
   sign: (data) => {
     return new Promise((res, rej) => {
       sign(
         data,
-        "secret",
+        vars.SECRET,
         {
           expiresIn: "1d",
         },

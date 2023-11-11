@@ -1,4 +1,5 @@
 const dotenv = require("dotenv");
+dotenv.config({ path: ".env" });
 dotenv.config({ path: "google.env" });
 
 const { createServer } = require("http");
@@ -12,15 +13,15 @@ const httpServer = createServer(app);
 
 const AuthRouter = require("./routers/auth");
 const TodoRouter = require("./routers/todo");
-const { errorMiddleware } = require("./config/app");
+const { errorMiddleware, vars } = require("./config/app");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 
-app.use(cookieParser("secret"));
+app.use(cookieParser(vars.SECRET));
 
 app.use(
   session({
-    secret: "secret",
+    secret: vars.SECRET,
   })
 );
 
@@ -37,6 +38,7 @@ app.use(
     },
   })
 );
+
 app.options("*", cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
