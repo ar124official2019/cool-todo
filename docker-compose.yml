@@ -1,0 +1,33 @@
+
+services:
+  client:
+    build: 
+      context: client
+      dockerfile: Dockerfile
+
+    volumes:
+      - ./client:/app
+
+    ports:
+      - 4200:4200
+
+  server:
+    build: 
+      context: server
+      dockerfile: Dockerfile
+
+    volumes:
+      - ./server:/app
+
+    ports:
+      - 3000:3000
+
+    depends_on:
+      - mysql
+
+  mysql:
+    image: bitnami/mysql:8.0
+    env_file: .env
+    
+    volumes:
+      - ./database/mysql:/bitnami/mysql/data

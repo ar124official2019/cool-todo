@@ -1,0 +1,9 @@
+{
+  "development": {
+    "username": "cool-todo",
+    "password": "cool-todo",
+    "database": "cool-todo",
+    "host": "mysql",
+    "dialect": "mysql"
+  }
+}
