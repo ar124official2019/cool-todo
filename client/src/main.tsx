@@ -7,13 +7,16 @@ import ErrorPage from "./Pages/ErrorPage.tsx";
 import { About } from "./Pages/About.tsx";
 import { store } from "./store/index.ts";
 import { Provider } from "react-redux";
-import { Login } from "./Auth/Login.tsx";
 import { Home } from "./Home.tsx";
 import { Signup } from "./Auth/Signup.tsx";
 import { Profile } from "./Auth/Profile.tsx";
 import { Todo } from "./Todo/Todo.tsx";
 import { Logout } from "./Auth/Logout.tsx";
 import { Todos } from "./Todo/Todos.tsx";
+import { Login } from "./Auth/login.tsx";
+import { NewTodo } from "./Todo/NewTodo.tsx";
+import { HomeRedirect } from "./HomeRedirect.tsx";
+import { UpdateTodo } from "./Todo/UpdateTodo.tsx";
 
 const appRouter = createBrowserRouter([
   {
@@ -41,8 +44,9 @@ const appRouter = createBrowserRouter([
         path: "/logout",
         element: <Logout />,
       },
+
       {
-        path: "/",
+        path: "/todo",
         element: <Home />,
         children: [
           {
@@ -53,9 +57,22 @@ const appRouter = createBrowserRouter([
                 path: "",
                 element: <Todos />,
               },
+              {
+                path: "new",
+                element: <NewTodo />,
+              },
+              {
+                path: "edit/:id",
+                element: <UpdateTodo />,
+              },
             ],
           },
         ],
+      },
+
+      {
+        path: "/",
+        element: <HomeRedirect />,
       },
     ],
   },

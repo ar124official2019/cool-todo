@@ -1,6 +1,8 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
 export function Todo() {
+  const navigate = useNavigate();
+
   return (
     <>
       <div className="rounded rounded-lg bg-blue-300 p-4">
@@ -9,7 +11,8 @@ export function Todo() {
             Your Todos
           </h1>
 
-          <button className="bg-blue-700 rounded rounded-lg p-2 px-4 text-white">
+          <button className="bg-blue-700 rounded rounded-lg p-2 px-4 text-white"
+            onClick={()=>navigate("/todo/new")}>
             Add another
           </button>
         </div>
