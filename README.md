@@ -22,3 +22,10 @@ docker-compose up #
 ```
 
 Once all containers are up and running, you should be able to open app at http://localhost:4200
+
+### Know Issues
+> If you are on Windows, node modules installed from host `Windows` machine may not work in containers, while development. You'll either use `WSL` or use a container to install the modules as following.
+```
+cd cool-todo # Make sure you're arleady in app main directory
+docker run --rm -itv .:/app node:18 /bin/bash -c "cd /app/client && npm install && cd /app/server && npm install"
+```
