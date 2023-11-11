@@ -24,7 +24,7 @@ export function Todos() {
 
   useEffect(() => {
     if (!todoData?.page) {
-      load(1, 10);
+      load(1, 5);
     }
   }, [todoData])
 
