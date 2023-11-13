@@ -1,10 +1,24 @@
 import { useEffect, useState } from "react";
+import * as Yup  from "yup";
 import { HttpResponse } from "../types/http";
 import { config } from "../config/config";
 import { useAppDispatch, useAppSelector } from "../store";
 import { setLogin } from "../store/login.slice";
 import { useNavigate } from "react-router-dom";
 import { setSignupSuccess } from "../store/auth.slice";
+import { useFormik } from "formik";
+
+const loginFormSchema = Yup.object({
+  email: Yup.string()
+    .max(256)
+    .email("Please enter a valid email.")
+    .required("Please enter email."),
+  password: Yup.string()
+    .min(8, "Password must be at-least 8 characters long.")
+    .required("Please enter password."),
+});
+
+type LoginForm = Yup.InferType<typeof loginFormSchema>;
 
 export function Login() {
   const navigate = useNavigate();
@@ -12,24 +26,19 @@ export function Login() {
   const signupSuccess = useAppSelector((state) => state.auth.signupSuccess);
   const dispatch = useAppDispatch();
   const [err, setErr] = useState<HttpResponse | null>(null);
-  const [form, setForm] = useState<LoginForm>({
-    email: "",
-    password: "",
+
+  const form = useFormik({
+    initialValues: { email: "", password: "" },
+    validationSchema: loginFormSchema,
+    onSubmit: login,
   });
 
-  const updateForm = (key: string, value: string) => {
-    setForm({
-      ...form,
-      [key]: value,
-    });
-  };
-
-  const login = () => {
+  function login() {
     dispatch(setSignupSuccess(false));
     setErr(null);
     fetch(`${config.API_BASE}/auth/login`, {
       method: "POST",
-      body: JSON.stringify(form),
+      body: JSON.stringify(form.values),
       headers: {
         "content-type": "application/json",
       },
@@ -68,7 +77,7 @@ export function Login() {
           </div>
         )}
 
-        <div className="form w-25">
+        <form className="form w-25" onSubmit={form.handleSubmit}>
           <div className="my-1">
             <b>Email</b>
             <div>
@@ -76,10 +85,15 @@ export function Login() {
                 type="email"
                 placeholder="Your email!"
                 className="w-full p-4 rounded rounded-lg"
-                value={form.email}
-                onChange={(e) => updateForm("email", e.target.value)}
+                {...form.getFieldProps("email")}
               />
             </div>
+
+            {form.touched.email && form.errors.email && (
+              <div>
+                <span className="px-2 text-red-600">{form.errors.email}</span>
+              </div>
+            )}
           </div>
 
           <div className="my-1">
@@ -89,10 +103,15 @@ export function Login() {
                 type="password"
                 placeholder="Your Password!"
                 className="w-full p-4 rounded rounded-lg"
-                value={form.password}
-                onChange={(e) => updateForm("password", e.target.value)}
+                {...form.getFieldProps("password")}
               />
             </div>
+
+            {form.touched.password && form.errors.password && (
+              <div>
+                <span className="px-2 text-red-600">{form.errors.password}</span>
+              </div>
+            )}
           </div>
 
           {err && (
@@ -114,6 +133,7 @@ export function Login() {
             <button
               className="bg-blue-700 rounded rounded-lg p-2 px-4 text-white"
               onClick={loginWithGoogle}
+              type="submit"
             >
               Login with Google
             </button>
@@ -125,13 +145,8 @@ export function Login() {
           >
             Create an account, instead
           </span>
-        </div>
+        </form>
       </div>
     </>
   );
-}
-
-interface LoginForm {
-  email: string;
-  password: string;
 }
