@@ -9,15 +9,14 @@ import { store } from "./store/index.ts";
 import { Provider } from "react-redux";
 import { Home } from "./Home.tsx";
 import { Signup } from "./Auth/Signup.tsx";
-import { Profile } from "./Auth/Profile.tsx";
 import { Todo } from "./Todo/Todo.tsx";
 import { Logout } from "./Auth/Logout.tsx";
 import { Todos } from "./Todo/Todos.tsx";
-import { Login } from "./Auth/login.tsx";
 import { NewTodo } from "./Todo/NewTodo.tsx";
 import { HomeRedirect } from "./HomeRedirect.tsx";
 import { UpdateTodo } from "./Todo/UpdateTodo.tsx";
 import { LoginGoogle } from "./Auth/LoginGoogle.tsx";
+import { Login } from "./Auth/Login.tsx";
 
 const appRouter = createBrowserRouter([
   {
@@ -31,7 +30,7 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/profile",
-        element: <Profile />,
+        lazy: () => import("./Auth/Profile.tsx"),
       },
       {
         path: "/signup",

@@ -118,6 +118,13 @@ export function Login() {
               Login with Google
             </button>
           </div>
+
+          <span
+            className="px-2 text-blue-500 hover:text-blue-700 cursor-pointer"
+            onClick={() => navigate("/signup")}
+          >
+            Create an account, instead
+          </span>
         </div>
       </div>
     </>

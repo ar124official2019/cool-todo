@@ -1,6 +1,6 @@
 import { useAppSelector } from "../store";
 
-export function Profile() {
+export function Component() {
   const loginData = useAppSelector((state) => state.login);
 
   return (
