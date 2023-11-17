@@ -18,7 +18,13 @@ npm install
 cd ../server
 npm install
 
-docker-compose up #
+docker-compose up # start all serves
+
+# Once mysql container has performed installations and is stable,
+#   migrate databases
+#   * Use another terminal for following task, keep docker stack running
+docker exec -it server /bin/bash
+    npx sequelize-cli db:migrate
 ```
 
 Once all containers are up and running, you should be able to open app at http://localhost:4200
