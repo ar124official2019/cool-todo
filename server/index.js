@@ -6,6 +6,7 @@ const { createServer } = require("http");
 const express = require("express");
 const cors = require("cors");
 const session = require("express-session");
+const morgan = require("morgan");
 require("./config/passport");
 
 const app = express();
@@ -39,6 +40,7 @@ app.use(
   })
 );
 
+app.use(morgan("dev"));
 app.options("*", cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

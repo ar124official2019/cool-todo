@@ -22,6 +22,7 @@ class AppResponse {
 }
 
 function errorMiddleware(err, _req, res, _next) {
+  console.log(`config/app.js/errorMiddelware:`, JSON.stringify(err));
   if (!(err instanceof AppResponse))
     err = AppResponse.createError(null, 'Something went wrong!', 500);
   res.status(err.code).json(err);
