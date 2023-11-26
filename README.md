@@ -23,7 +23,7 @@ docker-compose up # start all serves
 # Once mysql container has performed installations and is stable,
 #   migrate databases
 #   * Use another terminal for following task, keep docker stack running
-docker exec -it server /bin/bash
+docker-compose exec -it server /bin/bash
     npx sequelize-cli db:migrate
 ```
 
