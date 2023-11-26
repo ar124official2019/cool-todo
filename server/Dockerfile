@@ -3,4 +3,4 @@ WORKDIR /app
 
 RUN npm i --location=global bcrypt
 
-ENTRYPOINT [ "npm", "run", "dev" ]
+ENTRYPOINT [ "npm", "run", "start:dev" ]

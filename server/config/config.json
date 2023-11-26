@@ -1,9 +1,10 @@
 {
   "development": {
-    "username": "cool-todo",
-    "password": "cool-todo",
+    "username": "root",
+    "password": "root",
     "database": "cool-todo",
-    "host": "mysql",
+    "host": "127.0.0.1",
+    "port": 3310,
     "dialect": "mysql"
   }
 }
