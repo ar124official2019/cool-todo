@@ -21,33 +21,33 @@ export class TodoController {
 
   @Post()
   @UseGuards(AuthGuard('jwt'))
-  create(@Body() body: Todo, @Req() req) {
+  async create(@Body() body: Todo, @Req() req) {
     return AppResponse.create(
-      this.todoService.create(body, req?.user?.get('id')),
+      await this.todoService.create(body, req?.user?.get('id')),
     );
   }
 
   @Patch(':id')
   @UseGuards(AuthGuard('jwt'))
-  update(@Param('id') id, @Req() req, @Body() body: Todo) {
+  async update(@Param('id') id, @Req() req, @Body() body: Todo) {
     return AppResponse.create(
-      this.todoService.update(id, req?.user?.get('id'), body),
+      await this.todoService.update(id, req?.user?.get('id'), body),
     );
   }
 
   @Delete(':id')
   @UseGuards(AuthGuard('jwt'))
-  delete(@Param('id') id, @Req() req) {
+  async delete(@Param('id') id, @Req() req) {
     return AppResponse.create(
-      this.todoService.delete(id, req?.user?.get('id')),
+      await this.todoService.delete(id, req?.user?.get('id')),
     );
   }
 
   @Get(':id')
   @UseGuards(AuthGuard('jwt'))
-  getOne(@Param('id') id, @Req() req) {
+  async getOne(@Param('id') id, @Req() req) {
     return AppResponse.create(
-      this.todoService.getOne(id, req?.user?.get('id')),
+      await this.todoService.getOne(id, req?.user?.get('id')),
     );
   }
 
