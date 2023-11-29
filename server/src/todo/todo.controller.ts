@@ -13,7 +13,7 @@ import {
 import { TodoService } from './todo.service';
 import { Todo } from './todo.model';
 import { AuthGuard } from '@nestjs/passport';
-import { AppResponse } from 'config/app';
+import { AppResponse } from 'src/shared/types/app';
 
 @Controller('todo')
 export class TodoController {

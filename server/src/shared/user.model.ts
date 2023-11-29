@@ -1,5 +1,4 @@
-import { compare, hash } from 'bcrypt';
-import { signFunc } from 'config/jsonwebtoken';
+import { hash } from 'bcrypt';
 import { BeforeSave, Column, Model, Table } from 'sequelize-typescript';
 
 @Table
@@ -26,30 +25,5 @@ export class User extends Model {
 
   static associate(models: any) {
     console.log(models);
-  }
-
-  static async login({ email, password }) {
-    const user = await User.findOne({
-      where: {
-        email,
-      },
-    });
-
-    if (!user) throw 0;
-    const result = await compare(password, user.get('password'));
-    if (!result) throw 0;
-
-    const info = user.get();
-    delete info.password;
-
-    const token = await signFunc(info);
-    return { info, token };
-  }
-
-  async generateToken() {
-    const info = this.get();
-    delete info.password;
-    const token = await signFunc(this);
-    return { info, token };
   }
 }

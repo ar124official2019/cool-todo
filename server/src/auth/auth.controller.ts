@@ -14,8 +14,8 @@ import { AuthService } from '../shared/auth.service';
 import { User } from 'src/shared/user.model';
 import { Request, Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
-import { AppResponse } from 'config/app';
 import { SessionGuard } from './session.guard';
+import { AppResponse } from 'src/shared/types/app';
 
 @Controller('auth')
 export class AuthController {
