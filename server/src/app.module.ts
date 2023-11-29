@@ -9,7 +9,9 @@ import { Todo } from './todo/todo.model';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      envFilePath: [`.env`, `google.env`],
+    }),
 
     /** Sequelize */
     SequelizeModule.forRootAsync({
