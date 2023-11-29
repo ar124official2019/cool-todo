@@ -29,6 +29,16 @@ docker-compose exec -it server /bin/bash
 
 Once all containers are up and running, you should be able to open app at http://localhost:4200
 
+### Google OAuth Login
+To enable Google OAuth Login, create a file named `google.env` in `server` directory - and specify Google Client ID and Google Client Secret as following template.
+
+`> server/google.env`
+
+```env
+GOOGLE_CLIENT_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
+
 ### Know Issues
 > If you are on Windows, node modules installed from host `Windows` machine may not work in containers, while development. You'll either use `WSL` or use a container to install the modules as following.
 ```
