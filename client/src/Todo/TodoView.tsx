@@ -3,15 +3,19 @@ import { ITodo } from "../types/todo";
 import { useAppDispatch } from "../store";
 import { deleteTodo } from "../store/todo.slice";
 import { useHttpDelete } from "../types/http";
+import { AppModal } from "../Components/Modal";
+import { useState } from "react";
+import { Button } from "flowbite-react";
 
 export function TodoView(todo: ITodo) {
+  const [toggleDelete, setToggleDelete] = useState(false)
   const httpDelete = useHttpDelete();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const onDelete = async (id: number) => {
-    await httpDelete(`/todo/${id}`);
-    dispatch(deleteTodo(id));
+  const onDelete = async () => {
+    await httpDelete(`/todo/${todo.id}`);
+    dispatch(deleteTodo(todo.id));
   }
 
   return (
@@ -24,7 +28,7 @@ export function TodoView(todo: ITodo) {
 
         <span
           className="px-2 cursor-pointer text-red-500 hover:text-red-700"
-          onClick={() => onDelete(todo.id)}
+          onClick={() => setToggleDelete(true)}
         >
           Delete
         </span>
@@ -36,6 +40,27 @@ export function TodoView(todo: ITodo) {
           Edit
         </span>
       </div>
+
+      <AppModal
+        title="Delete Todo"
+        visible={toggleDelete}
+        onClose={() => setToggleDelete(false)}
+        actions={
+          <>
+            <Button color="warning" onClick={() => onDelete()}>
+              Delete
+            </Button>
+          </>
+        }
+      >
+        <p>
+          Do you really want to delete todo{" "}
+          <b>
+            <i>"{todo.todo}"</i>
+          </b>
+          ?
+        </p>
+      </AppModal>
     </div>
   );
 }
