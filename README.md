@@ -32,6 +32,8 @@ Once all containers are up and running, you should be able to open app at http:/
 ### Google OAuth Login
 To enable Google OAuth Login, create a file named `google.env` in `server` directory - and specify Google Client ID and Google Client Secret as following template.
 
+> Of-course this will require you to restart the `server` container as well.
+
 `> server/google.env`
 
 ```env
