@@ -1,6 +1,6 @@
 FROM node:18
 WORKDIR /app
 
-RUN npm i --location=global bcrypt
+RUN npm i --location=global bcrypt @nestjs/cli
 
-ENTRYPOINT [ "npm", "run", "start:dev" ]
+ENTRYPOINT [ "npm", "run", "start:debug:public" ]
