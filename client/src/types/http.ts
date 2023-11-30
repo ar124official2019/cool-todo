@@ -28,6 +28,26 @@ export function httpGet(path: string, headers: any = {}) {
     });
 }
 
+export function httpDelete(path: string, headers: any = {}) {
+  return fetch(`${config.API_BASE}${path}`, {
+    method: "DELETE",
+    headers: {
+      accept: "application/json",
+      ...headers,
+    },
+
+    credentials: "include",
+  })
+    .then(async (res) => {
+      if (!res.ok) throw res;
+      return res.json();
+    })
+    .catch(async (err) => {
+      if (!err.json) throw err;
+      return err.json();
+    });
+}
+
 export function httpPost(path: string, data: any, headers: any = {}) {
   return fetch(`${config.API_BASE}${path}`, {
     method: "POST",
@@ -95,5 +115,13 @@ export function useHttpPatch() {
       ...headers,
       authorization: `bearer ${token}`,
     });
+  };
+}
+
+export function useHttpDelete() {
+  const token = useAppSelector((state) => state.login?.token || "");
+
+  return (path: string, headers: any = {}) => {
+    return httpDelete(path, { ...headers, authorization: `bearer ${token}` });
   };
 }
