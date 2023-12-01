@@ -1,71 +1,102 @@
-import { useEffect } from "react"
+import { useCallback, useEffect } from "react";
 import { useHttpGet } from "../types/http";
 import { useAppDispatch, useAppSelector } from "../store";
 import { setTodoPage } from "../store/todo.slice";
 import { TodoView } from "./TodoView";
+import { Pagination, Card, Button } from "flowbite-react";
+import { useNavigate } from "react-router-dom";
 
 export function Todos() {
-  const todoData = useAppSelector((state)=>state.todo);
+  const navigate = useNavigate();
+  const todoData = useAppSelector((state) => state.todo);
   const dispatch = useAppDispatch();
   const httpGet = useHttpGet();
 
-  const load = (page: number, limit: number) => {
-    httpGet(`/todo?page=${page}&limit=${limit}`).then((res) =>
-      dispatch(
-        setTodoPage({
-          todos: res?.data?.rows,
-          page,
-          limit,
-          total: res?.data?.count,
-        })
-      )
-    );
-  }
+  const load = useCallback(
+    (page: number, limit: number) => {
+      httpGet(`/todo?page=${page}&limit=${limit}`).then((res) =>
+        dispatch(
+          setTodoPage({
+            todos: res?.data?.rows,
+            page,
+            limit,
+            total: res?.data?.count,
+          }),
+        ),
+      );
+    },
+    [dispatch, httpGet],
+  );
+
+  const onPageChange = (page: number) => {
+    console.log(page);
+    load(page, 5);
+  };
 
   useEffect(() => {
     if (!todoData?.page) {
       load(1, 5);
     }
-  }, [todoData])
+
+    console.log(todoData);
+  }, [todoData, load]);
 
   return (
     <>
-      <div className="flex flex-col">
-        {todoData.todos.map((i) => (
-          <TodoView {...i}></TodoView>
-        ))}
+      <div>
+        {!todoData?.todos?.length ? (
+          <div className="flex flex-row items-center justify-center">
+            <Card className="max-w-sm">
+              <div className="flex flex-col items-center justify-center p-10 mx-10">
+                <img
+                  alt="Bonnie image"
+                  src="https://cdn.pixabay.com/photo/2016/10/10/01/49/hook-1727484_960_720.png"
+                  className="mb-3 w-[96px] h-[96px] rounded-full shadow-lg"
+                />
+                <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
+                  Everything Done
+                </h5>
+                <span className="text-sm text-center text-gray-500 dark:text-gray-400">
+                  You caught everything, already done.
+                </span>
+              </div>
 
-        <div className="p-4 flex flex-row items-center justify-center">
-          {todoData.previous ? (
-            <button
-              className="bg-blue-700 rounded rounded-lg text-xs p-2 px-4 text-white"
-              onClick={() => load(todoData.previous, todoData.limit)}
-            >
-              &lt; Previous
-            </button>
-          ) : (
-            <></>
-          )}
-
-          <div className="text-xs mx-2">
-            <span>Page No<b>&nbsp;{todoData.page}</b></span>
-            <span>&nbsp;-&nbsp;</span>
-            <span>Per Page<b>&nbsp;{todoData.limit}</b></span>
-            <span>&nbsp;-&nbsp;</span>
-            <span>Total<b>&nbsp;{todoData.total}</b></span>
+              <Button color="light" type="submit" href="/todo/new">
+                Add a new Todo
+              </Button>
+            </Card>
           </div>
+        ) : (
+          <Button
+            pill
+            color="light"
+            size={"sm"}
+            onClick={() => navigate("/todo/new")}
+            title="Add a new todo"
+          >
+            New Todo
+          </Button>
+        )}
 
-          {todoData.next ? (
-            <button
-              className="bg-blue-700 rounded rounded-lg text-xs p-2 px-4 text-white"
-              onClick={() => load(todoData.next, todoData.limit)}
-            >
-              Next &gt;
-            </button>
-          ) : (
-            <></>
-          )}
+        <div className="p-4 flex flex-row flex-wrap">
+          {todoData.todos.map((i) => (
+            <div className="p-1 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 flex flex-col-reverse">
+              <TodoView {...i}></TodoView>
+            </div>
+          ))}
         </div>
+
+        {todoData?.todos?.length && (
+          <div className="p-4 flex flex-row items-center justify-center">
+            <div className="flex overflow-x-auto sm:justify-center">
+              <Pagination
+                currentPage={todoData.page || 1}
+                totalPages={Math.ceil(todoData.total / todoData.limit) || 1}
+                onPageChange={onPageChange}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

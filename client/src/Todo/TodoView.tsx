@@ -5,10 +5,10 @@ import { deleteTodo } from "../store/todo.slice";
 import { useHttpDelete } from "../types/http";
 import { AppModal } from "../Components/Modal";
 import { useState } from "react";
-import { Button } from "flowbite-react";
+import { Button, Card } from "flowbite-react";
 
 export function TodoView(todo: ITodo) {
-  const [toggleDelete, setToggleDelete] = useState(false)
+  const [toggleDelete, setToggleDelete] = useState(false);
   const httpDelete = useHttpDelete();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -16,42 +16,46 @@ export function TodoView(todo: ITodo) {
   const onDelete = async () => {
     await httpDelete(`/todo/${todo.id}`);
     dispatch(deleteTodo(todo.id));
-  }
+  };
 
   return (
-    <div className="p-2 bg-blue-100 mb-1 cursor-pointer hover:bg-blue-200">
+    <Card className="w-full h-full">
       <b>{todo.todo}</b>
-      <pre>{todo.description || "No Description"}</pre>
+      <p className="flex-1">{todo.description || "No Description"}</p>
 
-      <div className="text-xs flex flex-row-reverse items-center">
+      <div className="text-xs flex flex-col-reverse md:flex-row-reverse md:items-center">
         <i>{new Date(todo.updatedAt).toLocaleString()}</i>
 
-        <span
-          className="px-2 cursor-pointer text-red-500 hover:text-red-700"
+        <Button
+          size="small"
+          color="warning"
+          pill
+          className="px-4 mr-1 mb-1"
           onClick={() => setToggleDelete(true)}
         >
           Delete
-        </span>
+        </Button>
 
-        <span
-          className="px-2 cursor-pointer text-blue-500 hover:text-blue-700"
+        <Button
+          size="small"
+          color="light"
+          pill
+          className="px-4 mr-1 mb-1"
           onClick={() => navigate(`/todo/edit/${todo.id}`)}
         >
           Edit
-        </span>
+        </Button>
       </div>
 
       <AppModal
         title="Delete Todo"
         visible={toggleDelete}
         onClose={() => setToggleDelete(false)}
-        actions={
-          <>
-            <Button color="warning" onClick={() => onDelete()}>
-              Delete
-            </Button>
-          </>
-        }
+        actions={[
+          <Button color="warning" onClick={() => onDelete()}>
+            Delete
+          </Button>,
+        ]}
       >
         <p>
           Do you really want to delete todo{" "}
@@ -61,6 +65,6 @@ export function TodoView(todo: ITodo) {
           ?
         </p>
       </AppModal>
-    </div>
+    </Card>
   );
 }

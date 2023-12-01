@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import * as Yup  from "yup";
+import * as Yup from "yup";
 import { HttpResponse } from "../types/http";
 import { config } from "../config/config";
 import { useAppDispatch, useAppSelector } from "../store";
@@ -7,6 +7,7 @@ import { setLogin } from "../store/login.slice";
 import { useNavigate } from "react-router-dom";
 import { setSignupSuccess } from "../store/auth.slice";
 import { useFormik } from "formik";
+import { Card, Label, TextInput, Button, Checkbox } from "flowbite-react";
 
 const loginFormSchema = Yup.object({
   email: Yup.string()
@@ -54,7 +55,7 @@ export function Login() {
         const data = await err.json();
         setErr(data);
       });
-  };
+  }
 
   const loginWithGoogle = () => {
     window.location.href = "http://localhost:3000/api/v1/auth/login/google";
@@ -66,86 +67,70 @@ export function Login() {
 
   return (
     <>
-      <div className="rounded rounded-lg bg-blue-300 p-4">
-        <h1 className="font-bold text-center uppercase text-2xl">Login</h1>
-
-        {signupSuccess && (
-          <div>
+      <div className="flex flex-row items-center justify-center">
+        <Card className="w-full md:w-[400px]">
+          {signupSuccess && (
             <span className="text-green-700 text-xs">
               You have successfully signed up. Login to continue!
             </span>
-          </div>
-        )}
-
-        <form className="form w-25" onSubmit={form.handleSubmit}>
-          <div className="my-1">
-            <b>Email</b>
-            <div>
-              <input
-                type="email"
-                placeholder="Your email!"
-                className="w-full p-4 rounded rounded-lg"
-                {...form.getFieldProps("email")}
-              />
-            </div>
-
-            {form.touched.email && form.errors.email && (
-              <div>
-                <span className="px-2 text-red-600">{form.errors.email}</span>
-              </div>
-            )}
-          </div>
-
-          <div className="my-1">
-            <b>Password</b>
-            <div>
-              <input
-                type="password"
-                placeholder="Your Password!"
-                className="w-full p-4 rounded rounded-lg"
-                {...form.getFieldProps("password")}
-              />
-            </div>
-
-            {form.touched.password && form.errors.password && (
-              <div>
-                <span className="px-2 text-red-600">{form.errors.password}</span>
-              </div>
-            )}
-          </div>
-
-          {err && (
-            <div>
-              <span className="text-red-700 text-xs">{err?.message}</span>
-            </div>
           )}
 
-          <div className="flex flex-row my-2">
-            <button
-              className="bg-blue-700 rounded rounded-lg p-2 px-4 text-white"
-              onClick={login}
-            >
-              Login
-            </button>
+          <form className="flex flex-col gap-4" onSubmit={form.handleSubmit}>
+            <div>
+              <div className="mb-2 block">
+                <Label value="Your email" />
+              </div>
 
-            <div className="mx-1"></div>
+              <TextInput
+                type="Email"
+                placeholder="Enter email"
+                {...form.getFieldProps("email")}
+              />
 
-            <button
-              className="bg-blue-700 rounded rounded-lg p-2 px-4 text-white"
-              onClick={loginWithGoogle}
-              type="submit"
-            >
-              Login with Google
-            </button>
-          </div>
+              {form.touched.email && form.errors.email && (
+                <div>
+                  <span className="px-2 text-red-600 text-xs">
+                    {form.errors.email}
+                  </span>
+                </div>
+              )}
+            </div>
 
-          <span
-            className="px-2 text-blue-500 hover:text-blue-700 cursor-pointer"
-            onClick={() => navigate("/signup")}
-          >
-            Create an account, instead
-          </span>
-        </form>
+            <div>
+              <div className="mb-2 block">
+                <Label value="Your password" />
+              </div>
+              <TextInput
+                type="password"
+                placeholder="Enter password"
+                {...form.getFieldProps("password")}
+              />
+
+              {form.touched.password && form.errors.password && (
+                <div>
+                  <span className="px-2 text-red-600 text-xs">
+                    {form.errors.password}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {err && (
+              <span className="text-green-700 text-xs">
+                {err?.message || "Something went wrong!"}
+              </span>
+            )}
+
+            <Button.Group>
+              <Button type="submit" color="light">
+                Login
+              </Button>
+              <Button type="button" onClick={loginWithGoogle}>
+                Login with Google
+              </Button>
+            </Button.Group>
+          </form>
+        </Card>
       </div>
     </>
   );

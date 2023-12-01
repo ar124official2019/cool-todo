@@ -38,7 +38,7 @@ export function LoginGoogle() {
       .then(async (res) => {
         if (!res.ok) throw res;
         if (res.redirected) return (window.location.href = res.url);
-        
+
         setErr(null);
         const loginResponse = await res.json();
         localStorage.setItem(`loginData`, JSON.stringify(loginResponse?.data));

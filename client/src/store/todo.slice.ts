@@ -7,7 +7,7 @@ interface SetTodoPage {
     action: {
       type: string;
       payload: { todos: ITodos; page: number; limit: number; total: number };
-    }
+    },
   ): TodoState | undefined;
 }
 
@@ -27,7 +27,7 @@ export const todoSlice = createSlice<
     selectTodo: SelectTodo;
     addTodo: AddTodo;
     updateTodo: UpdateTodo;
-    deleteTodo: DeleteTodo
+    deleteTodo: DeleteTodo;
   },
   "todo"
 >({
@@ -73,7 +73,7 @@ export const todoSlice = createSlice<
     updateTodo: (state, action) => ({
       ...state,
       todos: [action.payload].concat(
-        state.todos.filter((i) => i.id != action.payload.id)
+        state.todos.filter((i) => i.id != action.payload.id),
       ),
     }),
 

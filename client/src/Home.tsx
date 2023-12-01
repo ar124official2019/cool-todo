@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 
 export function Home() {
   const login = useAppSelector((state) => state.login);
-  
+
   useEffect(() => () => {
     if (!login) {
       window.location.href = "/login";

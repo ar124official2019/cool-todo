@@ -52,7 +52,7 @@ export function Signup() {
         const data = await err.json();
         setErr(data);
       });
-  };
+  }
 
   return (
     <>
@@ -138,4 +138,3 @@ export function Signup() {
     </>
   );
 }
-

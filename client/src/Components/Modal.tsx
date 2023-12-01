@@ -5,10 +5,16 @@ export interface AppModalProps {
   onClose: () => void;
   visible: boolean;
   children: React.ReactNode;
-  actions?: React.ReactNode;
+  actions?: React.ReactNode[];
 }
 
-export function AppModal({ title, visible, onClose, children, actions }: AppModalProps) {
+export function AppModal({
+  title,
+  visible,
+  onClose,
+  children,
+  actions,
+}: AppModalProps) {
   const close = () => {
     onClose && onClose();
   };
@@ -20,11 +26,13 @@ export function AppModal({ title, visible, onClose, children, actions }: AppModa
         <div className="space-y-6">{children}</div>
       </Modal.Body>
       <Modal.Footer>
-        {actions && actions}
+        <Button.Group>
+          {actions && actions}
 
-        <Button color="gray" onClick={close}>
-          Close
-        </Button>
+          <Button color="gray" onClick={close}>
+            Close
+          </Button>
+        </Button.Group>
       </Modal.Footer>
     </Modal>
   );

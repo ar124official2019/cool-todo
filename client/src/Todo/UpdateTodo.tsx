@@ -39,7 +39,6 @@ export function UpdateTodo() {
     });
   };
 
-
   useEffect(() => {
     if (!form.id) {
       httpGet(`/todo/${id}`).then((res: HttpResponse) => {
@@ -48,9 +47,9 @@ export function UpdateTodo() {
           id,
           ...res.data,
         });
-      })
+      });
     }
-  })
+  });
 
   return (
     <div className="form w-25">
@@ -60,7 +59,7 @@ export function UpdateTodo() {
           <input
             type="text"
             placeholder="What to do?"
-            className="w-full p-4 rounded rounded-lg"
+            className="w-full p-4 rounded-lg"
             value={form.todo}
             onChange={(e) => updateForm("todo", e.target.value)}
           />
@@ -72,7 +71,7 @@ export function UpdateTodo() {
         <div>
           <textarea
             placeholder="More description..."
-            className="w-full p-4 rounded rounded-lg"
+            className="w-full p-4 rounded-lg"
             value={form.description}
             onChange={(e) => updateForm("description", e.target.value)}
           />
@@ -87,7 +86,7 @@ export function UpdateTodo() {
 
       <div className="my-1">
         <button
-          className="bg-blue-700 rounded rounded-lg p-2 px-4 text-white"
+          className="bg-blue-700 rounded-lg p-2 px-4 text-white"
           onClick={update}
         >
           Update
