@@ -30,12 +30,12 @@ export function Todos() {
 
   const onPageChange = (page: number) => {
     console.log(page);
-    load(page, 5);
+    load(page, 8);
   };
 
   useEffect(() => {
     if (!todoData?.page) {
-      load(1, 5);
+      load(1, 8);
     }
 
     console.log(todoData);
@@ -67,15 +67,29 @@ export function Todos() {
             </Card>
           </div>
         ) : (
-          <Button
-            pill
-            color="light"
-            size={"sm"}
-            onClick={() => navigate("/todo/new")}
-            title="Add a new todo"
-          >
-            New Todo
-          </Button>
+          <div className="p-4 flex flex-row items-center justify-between">
+            <Button
+              pill
+              color="light"
+              size={"sm"}
+              onClick={() => navigate("/todo/new")}
+              title="Add a new todo"
+            >
+              New Todo
+            </Button>
+
+            {todoData?.todos?.length && (
+              <div className="p-4 flex flex-row items-center justify-center">
+                <div className="flex overflow-x-auto sm:justify-center">
+                  <Pagination
+                    currentPage={todoData.page || 1}
+                    totalPages={Math.ceil(todoData.total / todoData.limit) || 1}
+                    onPageChange={onPageChange}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
         )}
 
         <div className="p-4 flex flex-row flex-wrap">
@@ -85,18 +99,6 @@ export function Todos() {
             </div>
           ))}
         </div>
-
-        {todoData?.todos?.length && (
-          <div className="p-4 flex flex-row items-center justify-center">
-            <div className="flex overflow-x-auto sm:justify-center">
-              <Pagination
-                currentPage={todoData.page || 1}
-                totalPages={Math.ceil(todoData.total / todoData.limit) || 1}
-                onPageChange={onPageChange}
-              />
-            </div>
-          </div>
-        )}
       </div>
     </>
   );
