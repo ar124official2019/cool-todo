@@ -14,7 +14,6 @@ import { Logout } from "./Auth/Logout.tsx";
 import { Todos } from "./Todo/Todos.tsx";
 import { NewTodo } from "./Todo/NewTodo.tsx";
 import { HomeRedirect } from "./HomeRedirect.tsx";
-import { UpdateTodo } from "./Todo/UpdateTodo.tsx";
 import { LoginGoogle } from "./Auth/LoginGoogle.tsx";
 import { Login } from "./Auth/Login.tsx";
 
