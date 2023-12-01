@@ -118,11 +118,17 @@ export function Signup() {
               </span>
             )}
 
-            <Button.Group>
-              <Button type="submit" color="light">
-                Signup
-              </Button>
-            </Button.Group>
+            <Button type="submit" color="light">
+              Signup
+            </Button>
+
+            <Button
+              type="button"
+              onClick={() => navigate("/login")}
+              color="light"
+            >
+              Login, instead
+            </Button>
           </form>
         </Card>
       </div>

@@ -119,14 +119,21 @@ export function Login() {
               </span>
             )}
 
-            <Button.Group>
-              <Button type="submit" color="light">
-                Login
-              </Button>
-              <Button type="button" onClick={loginWithGoogle}>
-                Login with Google
-              </Button>
-            </Button.Group>
+            <Button type="submit" color="light">
+              Login
+            </Button>
+
+            <Button type="button" onClick={loginWithGoogle} color="light">
+              Login with Google
+            </Button>
+
+            <Button
+              type="button"
+              onClick={() => navigate("/signup")}
+              color="light"
+            >
+              Signup, instead
+            </Button>
           </form>
         </Card>
       </div>
