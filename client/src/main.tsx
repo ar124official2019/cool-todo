@@ -67,7 +67,7 @@ const appRouter = createBrowserRouter([
               },
               {
                 path: "edit/:id",
-                element: <UpdateTodo />,
+                element: <NewTodo />,
               },
             ],
           },

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { ITodo } from "../types/todo";
 import { useAppDispatch } from "../store";
-import { deleteTodo } from "../store/todo.slice";
+import { deleteTodo, selectTodo } from "../store/todo.slice";
 import { useHttpDelete } from "../types/http";
 import { AppModal } from "../Components/Modal";
 import { useState } from "react";
@@ -12,6 +12,11 @@ export function TodoView(todo: ITodo) {
   const httpDelete = useHttpDelete();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const onEdit = () => {
+    dispatch(selectTodo(todo));
+    navigate(`/todo/edit/${todo.id}`);
+  }
 
   const onDelete = async () => {
     await httpDelete(`/todo/${todo.id}`);
@@ -41,7 +46,7 @@ export function TodoView(todo: ITodo) {
           color="light"
           pill
           className="px-4 mr-1 mb-1"
-          onClick={() => navigate(`/todo/edit/${todo.id}`)}
+          onClick={onEdit}
         >
           Edit
         </Button>

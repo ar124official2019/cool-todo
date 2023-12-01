@@ -1,18 +1,21 @@
 import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../store";
-import { HttpResponse, useHttpPost } from "../types/http";
-import { addTodo } from "../store/todo.slice";
+import { useAppDispatch, useAppSelector } from "../store";
+import { HttpResponse, useHttpPatch, useHttpPost } from "../types/http";
+import { addTodo, updateTodo } from "../store/todo.slice";
 import { Card, Label, TextInput, Textarea, Button } from "flowbite-react";
 
 export function NewTodo() {
+  const selectedTodo = useAppSelector((state) => state.todo.selected);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const httpPost = useHttpPost();
+  const httpPatch = useHttpPatch();
   const [err, setErr] = useState<HttpResponse | null>(null);
-  const [form, setForm] = useState<CreateTodoForm>({
-    todo: "",
-    description: "",
+  const [form, setForm] = useState<TodoForm>({
+    id: selectedTodo?.id || 0,
+    todo: selectedTodo?.todo || "",
+    description: selectedTodo?.description || "",
   });
 
   const updateForm = (key: string, value: string) => {
@@ -25,15 +28,20 @@ export function NewTodo() {
   const onAddTodoSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setErr(null);
+    const path = `/todo${form.id ? "/" + form.id : ""}`;
+    const func = form.id ? httpPatch : httpPost;
+    const dispatchFunc: typeof addTodo | typeof updateTodo = form.id
+      ? updateTodo
+      : addTodo;
 
-    httpPost("/todo", JSON.stringify(form), {
+    func(path, JSON.stringify(form), {
       "CONTENT-TYPE": "application/json",
     }).then((res: HttpResponse) => {
       if (res.error) {
         return setErr(res);
       }
 
-      dispatch(addTodo(res.data));
+      dispatch(dispatchFunc(res.data));
       navigate("/todo");
     });
   };
@@ -74,7 +82,7 @@ export function NewTodo() {
           )}
 
           <Button color="light" type="submit">
-            Add
+            {form.id ? "Save Changes" : "Add"}
           </Button>
         </form>
       </Card>
@@ -82,7 +90,8 @@ export function NewTodo() {
   );
 }
 
-interface CreateTodoForm {
+interface TodoForm {
+  id?: number;
   todo: string;
   description: string;
 }
