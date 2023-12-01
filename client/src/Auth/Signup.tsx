@@ -1,50 +1,44 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-import { config } from "../config/config";
-import { HttpResponse } from "../types/http";
+import { HttpResponse, useHttpPost } from "../types/http";
 import { useAppDispatch } from "../store";
+import { useNavigate } from "react-router-dom";
 import { setSignupSuccess } from "../store/auth.slice";
 import { useFormik } from "formik";
+import { Card, Label, TextInput, Button } from "flowbite-react";
 
 const signupFormSchema = Yup.object({
   fullName: Yup.string()
-    .max(256, "Name should not be longer than 256 characters.")
+    .max(256)
     .required("Please enter full name."),
   email: Yup.string()
-    .max(256, "Email should not be longer than 256 characters.")
+    .max(256)
     .email("Please enter a valid email.")
     .required("Please enter email."),
   password: Yup.string()
     .min(8, "Password must be at-least 8 characters long.")
-    .max(16, "Password must be at-most 16 characters long.")
     .required("Please enter password."),
 });
 
-type SignupForm = Yup.InferType<typeof signupFormSchema>;
-
 export function Signup() {
+  const httpPost = useHttpPost();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [err, setErr] = useState<HttpResponse | null>(null);
 
-  const form = useFormik<SignupForm>({
+  const form = useFormik({
     initialValues: { fullName: "", email: "", password: "" },
     validationSchema: signupFormSchema,
     onSubmit: signup,
   });
 
   function signup() {
-    fetch(`${config.API_BASE}/auth/signup`, {
-      method: "POST",
-      body: JSON.stringify(form.values),
-      headers: {
-        "content-type": "application/json",
-      },
+    dispatch(setSignupSuccess(false));
+    setErr(null);
+    httpPost(`/auth/signup`, JSON.stringify(form.values), {
+      "content-type": "application/json",
     })
-      .then(async (res) => {
-        if (!res.ok) throw res;
-        setErr(null);
+      .then(async () => {
         dispatch(setSignupSuccess(true));
         navigate("/login");
       })
@@ -56,84 +50,81 @@ export function Signup() {
 
   return (
     <>
-      <div className="rounded rounded-lg bg-blue-300 p-4">
-        <h1 className="font-bold text-center uppercase text-2xl">Signup</h1>
-
-        <form onSubmit={form.handleSubmit} className="form w-25">
-          <div className="my-1">
-            <b>Full Name</b>
+      <div className="flex flex-row items-center justify-center">
+        <Card className="w-full md:w-[400px]">
+          <form className="flex flex-col gap-4" onSubmit={form.handleSubmit}>
             <div>
-              <input
+              <div className="mb-2 block">
+                <Label value="Your full name" />
+              </div>
+
+              <TextInput
                 type="text"
-                placeholder="Your full name!"
-                className="w-full p-4 rounded rounded-lg"
+                placeholder="Enter your full name"
                 {...form.getFieldProps("fullName")}
               />
+
+              {form.touched.fullName && form.errors.fullName && (
+                <div>
+                  <span className="px-2 text-red-600 text-xs">
+                    {form.errors.fullName}
+                  </span>
+                </div>
+              )}
             </div>
 
-            {form.touched.fullName && form.errors.fullName && (
-              <div>
-                <span className="px-2 text-red-600">
-                  {form.errors.fullName}
-                </span>
-              </div>
-            )}
-          </div>
-
-          <div className="my-1">
-            <b>Email</b>
             <div>
-              <input
-                type="email"
-                placeholder="Your email!"
-                className="w-full p-4 rounded rounded-lg"
+              <div className="mb-2 block">
+                <Label value="Your email" />
+              </div>
+
+              <TextInput
+                type="Email"
+                placeholder="Enter email"
                 {...form.getFieldProps("email")}
               />
+
+              {form.touched.email && form.errors.email && (
+                <div>
+                  <span className="px-2 text-red-600 text-xs">
+                    {form.errors.email}
+                  </span>
+                </div>
+              )}
             </div>
 
-            {form.touched.email && form.errors.email && (
-              <div>
-                <span className="px-2 text-red-600">{form.errors.email}</span>
-              </div>
-            )}
-          </div>
-
-          <div className="my-1">
-            <b>Password</b>
             <div>
-              <input
+              <div className="mb-2 block">
+                <Label value="Your password" />
+              </div>
+              <TextInput
                 type="password"
-                placeholder="New password!"
-                className="w-full p-4 rounded rounded-lg"
+                placeholder="Enter password"
                 {...form.getFieldProps("password")}
               />
+
+              {form.touched.password && form.errors.password && (
+                <div>
+                  <span className="px-2 text-red-600 text-xs">
+                    {form.errors.password}
+                  </span>
+                </div>
+              )}
             </div>
 
-            {form.touched.password && form.errors.password && (
-              <div>
-                <span className="px-2 text-red-600">
-                  {form.errors.password}
-                </span>
-              </div>
+            {err && (
+              <span className="text-green-700 text-xs">
+                {err?.message || "Something went wrong!"}
+              </span>
             )}
-          </div>
 
-          {err && (
-            <div>
-              <span className="text-red-700 text-xs">{err?.message}</span>
-            </div>
-          )}
-
-          <div className="my-1">
-            <button
-              className="bg-blue-700 rounded rounded-lg p-2 px-4 text-white"
-              onClick={signup}
-              type="submit"
-            >
-              Create Account
-            </button>
-          </div>
-        </form>
+            <Button.Group>
+              <Button type="submit" color="light">
+                Signup
+              </Button>
+            </Button.Group>
+          </form>
+        </Card>
       </div>
     </>
   );

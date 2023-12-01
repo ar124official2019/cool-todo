@@ -7,7 +7,7 @@ import { setLogin } from "../store/login.slice";
 import { useNavigate } from "react-router-dom";
 import { setSignupSuccess } from "../store/auth.slice";
 import { useFormik } from "formik";
-import { Card, Label, TextInput, Button, Checkbox } from "flowbite-react";
+import { Card, Label, TextInput, Button } from "flowbite-react";
 
 const loginFormSchema = Yup.object({
   email: Yup.string()
@@ -18,8 +18,6 @@ const loginFormSchema = Yup.object({
     .min(8, "Password must be at-least 8 characters long.")
     .required("Please enter password."),
 });
-
-type LoginForm = Yup.InferType<typeof loginFormSchema>;
 
 export function Login() {
   const navigate = useNavigate();
@@ -63,7 +61,7 @@ export function Login() {
 
   useEffect(() => {
     if (loginData) navigate("/");
-  }, [loginData]);
+  }, [loginData, navigate]);
 
   return (
     <>

@@ -67,7 +67,7 @@ export function Todos() {
             </Card>
           </div>
         ) : (
-          <div className="p-4 flex flex-row items-center justify-between">
+          <div className="p-4 flex flex-row flex-wrap items-center justify-between">
             <Button
               pill
               color="light"
