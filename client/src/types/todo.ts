@@ -12,6 +12,7 @@ export interface ITodo {
   id: number;
   todo: string;
   description: string;
+  done?: boolean;
   createAt: string;
   updatedAt: string;
 }

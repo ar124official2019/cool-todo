@@ -1,16 +1,17 @@
 import { useNavigate } from "react-router-dom";
 import { ITodo } from "../types/todo";
 import { useAppDispatch } from "../store";
-import { deleteTodo, selectTodo } from "../store/todo.slice";
-import { useHttpDelete } from "../types/http";
+import { deleteTodo, selectTodo, updateTodo } from "../store/todo.slice";
+import { useHttpDelete, useHttpPatch } from "../types/http";
 import { AppModal } from "../Components/Modal";
 import { useEffect, useRef, useState } from "react";
 import { Button, Card, Badge } from "flowbite-react";
-import { HiCheck, HiPencil, HiTrash } from "react-icons/hi";
+import { HiCheck, HiX, HiPencil, HiTrash } from "react-icons/hi";
 
 export function TodoView(todo: ITodo) {
   const [toggleDelete, setToggleDelete] = useState(false);
   const httpDelete = useHttpDelete();
+  const httpPatch = useHttpPatch();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [mouseOver, setMouseOver] = useState(false);
@@ -25,6 +26,15 @@ export function TodoView(todo: ITodo) {
     await httpDelete(`/todo/${todo.id}`);
     dispatch(deleteTodo(todo.id));
   };
+
+  const onDone =async (done: boolean) => {
+    await httpPatch(
+      `/todo/${todo.id}`,
+      JSON.stringify({ ...todo, done })
+    );
+
+    dispatch(updateTodo({ ...todo, done }));
+  }
 
   useEffect(() => {
     if (ref?.current) {
@@ -45,11 +55,23 @@ export function TodoView(todo: ITodo) {
       <Card className="w-full h-full relative">
         {mouseOver && (
           <div className="actions absolute top-4 right-4 flex flex-row gap-2">
-            <Badge
-              className="cursor-pointer hover:bg-slate-300"
-              icon={HiCheck}
-              color="light"
-            />
+            {todo.done ? (
+              <Badge
+                className="cursor-pointer hover:bg-warning-300"
+                icon={HiX}
+                color="warning"
+                title="Mark as Undone"
+                onClick={() => onDone(false)}
+              />
+            ) : (
+              <Badge
+                className="cursor-pointer hover:bg-slate-300"
+                icon={HiCheck}
+                color="light"
+                title="Mark as done"
+                onClick={() => onDone(true)}
+              />
+            )}
 
             <Badge
               className="cursor-pointer hover:bg-slate-300"
@@ -70,8 +92,17 @@ export function TodoView(todo: ITodo) {
         <b>{todo.todo}</b>
         <p className="flex-1">{todo.description || "No Description"}</p>
 
-        <div className="text-xs flex flex-col-reverse md:flex-row-reverse md:items-center">
+        <div className="text-xs flex flex-col-reverse md:flex-row-reverse md:items-center gap-1">
           <i>{new Date(todo.updatedAt).toLocaleString()}</i>
+
+          {todo.done && (
+            <Badge
+              className="hover:bg-green-700 hover:text-white"
+              icon={HiCheck}
+              color="success"
+              title="This todo has been done!"
+            />
+          )}
         </div>
 
         <AppModal

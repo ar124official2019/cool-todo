@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Todos", {
+    await queryInterface.createTable('Todos', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -13,8 +13,8 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: "Users",
-          key: "id",
+          model: 'Users',
+          key: 'id',
         },
       },
       todo: {
@@ -23,8 +23,13 @@ module.exports = {
       },
       description: {
         allowNull: true,
-        defaultValue: "",
+        defaultValue: '',
         type: Sequelize.STRING,
+      },
+      done: {
+        allowNull: true,
+        defaultValue: false,
+        type: Sequelize.BOOLEAN,
       },
       createdAt: {
         allowNull: false,
@@ -37,7 +42,8 @@ module.exports = {
     });
   },
 
-  async down(queryInterface, Sequelize) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async down(queryInterface, _Sequelize) {
     await queryInterface.dropTable('Todos');
-  }
+  },
 };

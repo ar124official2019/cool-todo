@@ -72,9 +72,18 @@ export const todoSlice = createSlice<
 
     updateTodo: (state, action) => ({
       ...state,
-      todos: [action.payload].concat(
-        state.todos.filter((i) => i.id != action.payload.id),
-      ),
+      todos: [action.payload]
+        .concat(state.todos.filter((i) => i.id != action.payload.id))
+        .sort((a, b) => {
+          if (b.done && !a.done) return -1;
+          if (a.done && !b.done) return 1;
+          return 0;
+        })
+        .sort((a, b) => {
+          if (a.updatedAt > b.updatedAt) return -1;
+          if (b.updatedAt < a.updatedAt) return 1;
+          return 0;
+        }),
     }),
 
     deleteTodo: (state, action) => ({

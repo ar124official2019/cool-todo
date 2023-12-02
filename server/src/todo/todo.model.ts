@@ -9,6 +9,9 @@ export class Todo extends Model {
   @Column
   description?: string;
 
+  @Column
+  done?: boolean;
+
   @ForeignKey(() => User)
   @Column({ allowNull: false, unique: true })
   UserId: number;
@@ -19,7 +22,10 @@ export class Todo extends Model {
 
     const options = {
       ...query,
-      order: [['updatedAt', 'desc']],
+      order: [
+        ['done', 'asc'],
+        ['updatedAt', 'desc'],
+      ],
       offset,
       limit,
     };
