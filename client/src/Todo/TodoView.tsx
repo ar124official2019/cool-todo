@@ -28,10 +28,9 @@ export function TodoView(todo: ITodo) {
   };
 
   const onDone =async (done: boolean) => {
-    await httpPatch(
-      `/todo/${todo.id}`,
-      JSON.stringify({ ...todo, done })
-    );
+    await httpPatch(`/todo/${todo.id}`, JSON.stringify({ ...todo, done }), {
+      "content-type": "application/json",
+    });
 
     dispatch(updateTodo({ ...todo, done }));
   }
