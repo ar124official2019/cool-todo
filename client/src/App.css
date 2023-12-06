@@ -16,6 +16,7 @@
 @media screen and (max-width: 640px) {
   .app {
     grid-template-rows: auto auto auto;
+    overflow: scroll !important;
   }
 }
 

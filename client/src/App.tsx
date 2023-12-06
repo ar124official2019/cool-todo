@@ -4,9 +4,11 @@ import { useAppSelector } from "./store";
 import { Avatar, Dropdown, Navbar, Footer } from "flowbite-react";
 import { FaGithub, FaReact, FaNodeJs, FaGit, FaDocker } from "react-icons/fa6";
 import { SiNestjs, SiTypescript, SiMysql } from "react-icons/si";
+import { useProfilePicture } from "./types/user";
 
 function App() {
   const login = useAppSelector((state) => state.login);
+  useProfilePicture();
 
   return (
     <>
@@ -23,14 +25,14 @@ function App() {
             </span>
           </Navbar.Brand>
 
-          <div className="flex md:order-2">
+          <div className="flex md:order-2 gap-2">
             <Dropdown
               arrowIcon={false}
               inline
               label={
                 <Avatar
-                  alt="User settings"
-                  img="https://cdn.pixabay.com/photo/2023/11/26/20/58/horse-8414296_960_720.jpg"
+                  img={login?.profilePicture?.url || ""}
+                  size="sm"
                   rounded
                 />
               }

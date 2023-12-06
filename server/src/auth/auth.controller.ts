@@ -16,6 +16,9 @@ import { Request, Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { SessionGuard } from './session.guard';
 import { AppResponse } from 'src/shared/types/app';
+import { createReadStream, promises } from 'fs';
+import * as path from 'path';
+import { storageDirectories } from 'src/config';
 
 @Controller('auth')
 export class AuthController {
@@ -27,7 +30,30 @@ export class AuthController {
   @Post('signup')
   async signup(@Body() info: any) {
     try {
-      const result = await this.authService.createUser(info);
+      /**
+       * handle profile picture
+       */
+      let profilePicture = info.profilePicture || '';
+      if (info.profilePicture) {
+        await promises
+          .copyFile(
+            path.join(storageDirectories.tmp, info.profilePicture),
+            path.join(storageDirectories.profilePictures, info.profilePicture),
+          )
+          .then(() =>
+            promises.rm(path.join(storageDirectories.tmp, info.profilePicture)),
+          )
+          .catch((err) => {
+            console.error(err);
+            profilePicture = '';
+          });
+      }
+
+      const result = await this.authService.createUser({
+        ...info,
+        profilePicture,
+      });
+
       const user = result.get();
       delete user.password;
       return AppResponse.create(user);
@@ -45,6 +71,27 @@ export class AuthController {
     delete info.password;
     const token = await this.jwtService.sign(info);
     return AppResponse.create({ info, token });
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('profile-picture')
+  getProfilePicture(
+    @Req() req: Request & { user: User },
+    @Res() res: Response,
+  ) {
+    const user = req.user;
+    if (user.profilePicture) {
+      const stream = createReadStream(
+        path.join(
+          storageDirectories.profilePictures,
+          user.get('profilePicture'),
+        ),
+      );
+
+      return stream.pipe(res);
+    }
+
+    throw new BadRequestException(null, 'Profile Picture does not exists!');
   }
 
   @UseGuards(AuthGuard('google'))

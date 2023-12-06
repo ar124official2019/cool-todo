@@ -4,6 +4,9 @@ import * as session from 'express-session';
 import { ConfigService } from '@nestjs/config';
 import * as cookieParser from 'cookie-parser';
 import * as passport from 'passport';
+import { initStorage } from './config';
+
+initStorage();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

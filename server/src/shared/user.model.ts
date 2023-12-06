@@ -12,6 +12,9 @@ export class User extends Model {
   @Column
   password: string;
 
+  @Column
+  profilePicture: string;
+
   @BeforeSave
   static async beforeSaveHook(user: User) {
     if (

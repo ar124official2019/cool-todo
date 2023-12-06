@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { setSignupSuccess } from "../store/auth.slice";
 import { useFormik } from "formik";
 import { Card, Label, TextInput, Button } from "flowbite-react";
+import { FileUpload } from "./FileUpload";
 
 const signupFormSchema = Yup.object({
   fullName: Yup.string()
@@ -24,6 +25,7 @@ export function Signup() {
   const httpPost = useHttpPost();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [file, setFile] = useState<File | undefined>(undefined);
   const [err, setErr] = useState<HttpResponse | null>(null);
 
   const form = useFormik({
@@ -32,12 +34,26 @@ export function Signup() {
     onSubmit: signup,
   });
 
-  function signup() {
+  async function signup() {
     dispatch(setSignupSuccess(false));
     setErr(null);
-    httpPost(`/auth/signup`, JSON.stringify(form.values), {
-      "content-type": "application/json",
-    })
+    let uploadRef = "";
+    
+    if (file){
+      const fd = new FormData();
+      fd.set("file", file);
+      await httpPost(`/upload`, fd, {})
+        .then((res) => (uploadRef = res?.data?.ref))
+        .catch();
+    }
+    
+    httpPost(
+      `/auth/signup`,
+      JSON.stringify({ ...form.values, profilePicture: uploadRef || "" }),
+      {
+        "content-type": "application/json",
+      }
+    )
       .then(async () => {
         dispatch(setSignupSuccess(true));
         navigate("/login");
@@ -52,6 +68,10 @@ export function Signup() {
     <>
       <div className="flex flex-row items-center justify-center">
         <Card className="w-full md:w-[400px]">
+          <div className="p-4 flex flex-row items-center justify-center">
+            <FileUpload onUpload={(file) => setFile(file)} />
+          </div>
+
           <form className="flex flex-col gap-4" onSubmit={form.handleSubmit}>
             <div>
               <div className="mb-2 block">

@@ -6,6 +6,7 @@ import { SharedModule } from './shared/shared.module';
 import { TodoModule } from './todo/todo.module';
 import { User } from './shared/user.model';
 import { Todo } from './todo/todo.model';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
@@ -38,6 +39,8 @@ import { Todo } from './todo/todo.model';
     SharedModule,
 
     TodoModule,
+
+    UploadModule,
   ],
   controllers: [],
   providers: [],
