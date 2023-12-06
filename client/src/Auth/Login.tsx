@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { setSignupSuccess } from "../store/auth.slice";
 import { useFormik } from "formik";
 import { Card, Label, TextInput, Button } from "flowbite-react";
+import { fetchProfilePictureThunk } from "../types/user";
 
 const loginFormSchema = Yup.object({
   email: Yup.string()
@@ -48,6 +49,7 @@ export function Login() {
         const loginResponse = await res.json();
         localStorage.setItem(`loginData`, JSON.stringify(loginResponse?.data));
         dispatch(setLogin(loginResponse.data));
+        dispatch(fetchProfilePictureThunk);
       })
       .catch(async (err) => {
         const data = await err.json();
